@@ -1,4 +1,4 @@
-import {useState, useEffect, useReducer} from 'react';
+import {useState, useEffect, useReducer, useMemo, useRef} from 'react';
 import {Character} from '../../components/';
 import {Container, FavContainer} from './CharactersList.styles';
 import rootReducer from '../../reducers/rootReducer';
@@ -10,6 +10,8 @@ const INITIAL_STATE = {
 const CharactersList = ({theme}) => {
    const [characters, setCharacters] = useState([]);
    const [favCharacters, dispatch] = useReducer(rootReducer, INITIAL_STATE);
+   const [search, setSearch] = useState('');
+   const searchInput = useRef(null);
 
    useEffect(() => {
       fetch('https://rickandmortyapi.com/api/character/')
@@ -33,6 +35,23 @@ const CharactersList = ({theme}) => {
       }
    }
 
+   const handleSearch = () => {
+      setSearch(searchInput.current.value);
+   }
+
+   /*
+   const filteredCharacters = characters.filter(char => {
+      return char.name.toLowerCase().includes(search.toLowerCase());
+   })
+   */
+
+   // Using memo
+   const filteredCharacters = useMemo(() =>
+      characters.filter(char => {
+         return char.name.toLowerCase().includes(search.toLowerCase());
+      }), [characters, search]
+   );
+
    return (
       <>
          <FavContainer>
@@ -41,8 +60,11 @@ const CharactersList = ({theme}) => {
          })}
          </FavContainer>
          {favCharacters.favorites.length > 0 && <hr />}
+         <div>
+            <input ref={searchInput} type="text" value={search} onChange={handleSearch} />
+         </div>
          <Container>
-            {characters.map(character => {
+            {filteredCharacters.map(character => {
                return (
                   <Character faved={() => checkFaved(character)} clicked={() => handleClick(character)} key={character.id} theme={theme} characterData={character} />
                );
