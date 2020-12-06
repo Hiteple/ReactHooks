@@ -1,8 +1,11 @@
+import {useContext} from 'react';
 import {CharacterContainer} from './Character.styles';
+import {ThemeContext} from 'styled-components';
 
-const Character = ({theme, characterData}) => {
-   console.log(characterData)
+const Character = ({characterData}) => {
    const {name, species, status, gender, image} = characterData;
+   const theme = useContext(ThemeContext);
+
    return (
       <CharacterContainer theme={theme}>
          <h2>{name}</h2>

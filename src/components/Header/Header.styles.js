@@ -11,9 +11,9 @@ export const Title = styled.h1`
 `;
 
 export const Button = styled.button`
-   color: ${({theme}) => theme === 'light' ? '#fff' : '#000'};
-   background-color: ${({theme}) => theme === 'light' ? '#000' : '#fff'};
-   border: none;
+   color: ${({theme}) => theme.text};
+   background-color: ${({theme}) => theme.body};
+   border: ${({theme}) => theme.borderColor};
    margin-left: 10%;
    border-radius: 30px;
    padding: 10px 20px;

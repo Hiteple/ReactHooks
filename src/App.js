@@ -14,8 +14,8 @@ const App = () => {
   return (
      <ThemeProvider theme={theme === 'light' ? Themes.lightTheme : Themes.darkTheme}>
       <GlobalStyles />
-      <Layout theme={theme} toggleThemeProp={themeToggler}>
-         <CharactersList theme={theme}/>
+      <Layout toggleThemeProp={themeToggler}>
+         <CharactersList/>
       </Layout>
      </ThemeProvider>
     

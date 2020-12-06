@@ -1,6 +1,10 @@
+import {useContext} from 'react';
 import {Container, Title, Button} from './Header.styles';
+import {ThemeContext} from 'styled-components';
 
-const Header = ({theme, toggleThemeProp}) => {
+const Header = ({toggleThemeProp}) => {
+   const theme = useContext(ThemeContext);
+
    return (
       <Container>
          <Title>React Hooks</Title>
