@@ -5,3 +5,9 @@ export const Container = styled.div`
    flex-wrap: wrap;
    justify-content: center;
 `;
+
+export const FavContainer = styled.div`
+   display: flex;
+   flex-wrap: wrap;
+   justify-content: center;
+`;
