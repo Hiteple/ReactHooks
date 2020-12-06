@@ -1,5 +1,6 @@
-import {useState, useEffect, useReducer, useMemo, useRef} from 'react';
-import {Character} from '../../components/';
+import {useState, useReducer, useMemo, useRef, useCallback} from 'react';
+import useCharacters from '../../hooks/useCharacters';
+import {Character, Search} from '../../components/';
 import {Container, FavContainer} from './CharactersList.styles';
 import rootReducer from '../../reducers/rootReducer';
 
@@ -8,16 +9,10 @@ const INITIAL_STATE = {
 }
 
 const CharactersList = ({theme}) => {
-   const [characters, setCharacters] = useState([]);
+   const characters = useCharacters('https://rickandmortyapi.com/api/character');
    const [favCharacters, dispatch] = useReducer(rootReducer, INITIAL_STATE);
    const [search, setSearch] = useState('');
    const searchInput = useRef(null);
-
-   useEffect(() => {
-      fetch('https://rickandmortyapi.com/api/character/')
-         .then(response => response.json())
-         .then(characters => setCharacters(characters.results));
-   }, []);
 
    const handleClick = (character) => {
       const found = favCharacters.favorites.filter(char => char.name === character.name);
@@ -35,11 +30,17 @@ const CharactersList = ({theme}) => {
       }
    }
 
+   /* Replacing with useCallback
    const handleSearch = () => {
       setSearch(searchInput.current.value);
    }
+   */
 
-   /*
+   const handleSearch = useCallback(() => {
+      setSearch(searchInput.current.value);
+   }, []);
+
+   /* Replacing with useMemo
    const filteredCharacters = characters.filter(char => {
       return char.name.toLowerCase().includes(search.toLowerCase());
    })
@@ -60,9 +61,7 @@ const CharactersList = ({theme}) => {
          })}
          </FavContainer>
          {favCharacters.favorites.length > 0 && <hr />}
-         <div>
-            <input ref={searchInput} type="text" value={search} onChange={handleSearch} />
-         </div>
+         <Search searchInput={searchInput} search={search} handleSearch={handleSearch} />
          <Container>
             {filteredCharacters.map(character => {
                return (
